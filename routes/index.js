@@ -63,7 +63,6 @@ module.exports = function (db) {
     if (wheres.length > 0) {
       sql += ` WHERE ${wheres.join(' and ')}`
     }
-   
 
     db.query(sql, values, (err, data) => {
       if(err)
@@ -73,19 +72,21 @@ module.exports = function (db) {
 
       //sorting
       sql = 'Select * FROM bread '
-      sql+= `ORDER BY ${sortBy} ${sortMode}`
+      
 
       if (wheres.length > 0) {
         sql += ` WHERE ${wheres.join(' and ')} `
       }
+      sql+= `ORDER BY ${sortBy} ${sortMode}`
       sql += `  LIMIT  $${count} OFFSET  $${count+1}`
       count++
       count++
+      console.log(sql)
    
       db.query(sql, [...values, LIMIT, OFFSET], (err, data) => {
         if(err)
         console.log('gabisa ambil data',err)
-        res.render('list', { rows: data.rows, pages, page, moment, url, query: req.query })
+        res.render('list', { rows:data.rows , pages, page, moment, url, query: req.query })
       })
       
     })
